@@ -1,9 +1,20 @@
 package main
 
+import (
+    "net/http"
+    "os"
+    "log"
+    "fmt"
+)
+
 func main() {
 	// put your go webserver code here!
-
-	// hint: you will need this line of code to make a static file server:
-	// mux.Handle("/", http.FileServer(http.Dir("relative-path-to-web-files")))
-	// this will serve static files of the / path out of "relative-path-to-web-files" directory.
+    addr := os.Getenv("PORT")
+    fmt.Println(addr)
+    if len(addr) == 0 {
+        addr = ":80"
+    }
+    http.Handle("/", http.FileServer(http.Dir("./static")))
+    log.Printf("listening on %s...", addr)
+    log.Fatal(http.ListenAndServe(addr, nil))
 }
